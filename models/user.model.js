@@ -16,6 +16,27 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true }); // Skapar "createdAt" och "updatedAt"
 
+
+// Pre-hook för att hasha lösenordet innan det sparas
+userSchema.pre('save', async function (next) {
+    // Kontrollera om lösenordet har ändrats eller är nytt
+    if (!this.isModified('passwordHash')) return next();
+
+    try {
+        // Hasha lösenordet med bcrypt och salt (10 tecken)
+        const salt = await bcrypt.genSalt(10);
+        this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+        next();
+    } catch (error) {
+        next(error); // Skicka vidare felet om något går fel
+    }
+});
+
+// Metod för att validera lösenordet vid inloggning
+userSchema.methods.isValidPassword = async function (password) {
+    return await bcrypt.compare(password, this.passwordHash); // Jämför lösenordet med hashen
+};
+
 // Skapa en modell för användare
 const User = mongoose.model('User', userSchema);
 
