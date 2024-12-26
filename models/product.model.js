@@ -15,7 +15,8 @@ const productSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: [true, "Du måste ange ett pris"]
+        required: [true, "Du måste ange ett pris"],
+        min: [0, "Lägsta pris är 0"]
     },
     stock: {
         type: Number,
@@ -52,7 +53,7 @@ productSchema.pre('save', function (next) {
     // Uppdatera stockStatus baserat på lagersaldot
     if (this.stock === 0) {
         this.stockStatus = "Slut i lager";
-    } else if (this.stock < 5) {
+    } else if (this.stock < 6) {
         this.stockStatus = "Få kvar";
     } else {
         this.stockStatus = "I lager";
