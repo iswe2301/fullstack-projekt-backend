@@ -11,11 +11,11 @@ const init = async () => {
 
     // Skapa hapi-servern
     const server = Hapi.server({
-        port: 5000,
-        host: 'localhost',
+        port: process.env.PORT || 3000, // Använd port 3000 om ingen port anges i .env
+        host: process.env.HOST || 'localhost', // Använd localhost om ingen host anges i .env
         routes: {
             cors: {
-                origin: ['http://localhost:3000', 'https://www.thunderclient.com', 'http://127.0.0.1:5500', 'http://localhost:5500', 'http://localhost:5000'],
+                origin: ["*"], // Tillåt alla CORS-anrop
                 credentials: true,
                 maxAge: 86400,
                 headers: ["Accept", "Content-Type", "Access-Control-Allow-Origin"]
