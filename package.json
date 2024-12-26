@@ -12,7 +12,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon server.js"
   },
   "author": "Isa Westling",
   "license": "ISC",
